@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZEROBASEONE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #141414;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Category Selection Screen */
+        .category-selection {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #000000 0%, #1a0a0a 100%);
+        }
+
+        .category-logo {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 56px;
+            color: #E50914;
+            letter-spacing: 4px;
+            margin-bottom: 70px;
+            text-shadow: 2px 2px 8px rgba(229, 9, 20, 0.5);
+        }
+
+        .category-title {
+            font-size: 3.5vw;
+            font-weight: 400;
+            color: #ffffff;
+            margin-bottom: 60px;
+            letter-spacing: 2px;
+        }
+
+        .categories-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 45px;
+            max-width: 1100px;
+        }
+
+        .category-box {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .category-box:hover {
+            transform: scale(1.08);
+        }
+
+        .category-card {
+            width: 280px;
+            height: 280px;
+            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+            border-radius: 6px;
+            border: 3px solid transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 35px 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(229, 9, 20, 0.15), rgba(139, 0, 0, 0.15));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .category-box:hover .category-card::before {
+            opacity: 1;
+        }
+
+        .category-box:hover .category-card {
+            border-color: #E8E8E8;
+            box-shadow: 0 10px 35px rgba(229, 9, 20, 0.5);
+        }
+
+        .category-icon {
+            font-size: 75px;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            position: relative;
+            z-index: 1;
+        }
+
+        .category-name {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 26px;
+            color: #E50914;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+
+        .category-box:hover .category-name {
+            color: #ffffff;
+            letter-spacing: 3px;
+        }
+
+        .category-desc {
+            font-size: 13px;
+            color: #808080;
+            font-weight: 400;
+            transition: color 0.3s;
+            line-height: 1.5;
+            position: relative;
+            z-index: 1;
+        }
+
+        .category-box:hover .category-desc {
+            color: #cccccc;
+        }
+
+        /* Main Content Sections */
+        .main-content {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .main-content.active {
+            display: block;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 25px 50px;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #222;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 38px;
+            color: #E50914;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            cursor: pointer;
+        }
+
+        .back-btn {
+            background: transparent;
+            border: 1px solid #808080;
+            color: #808080;
+            padding: 10px 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 1.5px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            border-color: #E8E8E8;
+            color: #E8E8E8;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .content-section {
+            padding: 120px 50px 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 50px;
+        }
+
+        .section-header h1 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 60px;
+            color: #E50914;
+            letter-spacing: 4px;
+            margin-bottom: 15px;
+        }
+
+        .section-header p {
+            font-size: 18px;
+            color: #cccccc;
+            line-height: 1.6;
+        }
+
+        /* Members Grid */
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 35px;
+        }
+
+        .member-card {
+            background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .member-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 12px 35px rgba(229, 9, 20, 0.4);
+        }
+
+        .member-image {
+            width: 100%;
+            height: 1050px;
+            background: linear-gradient(135deg, #E50914, #8B0000);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            font-family: 'Bebas Neue', cursive;
+            color: rgba(255,255,255,0.3);
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .member-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50%;
+            height: 20%;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+        }
+
+        .member-info {
+            padding: 25px;
+        }
+
+        .member-name {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 28px;
+            color: #E50914;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .member-role {
+            font-size: 14px;
+            color: #888888;
+            margin-bottom: 12px;
+        }
+
+        .member-bio {
+            font-size: 13px;
+            color: #cccccc;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .member-details {
+            font-size: 12px;
+            color: #999999;
+            line-height: 1.8;
+            border-top: 1px solid #333;
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+
+        .member-details div {
+            margin-bottom: 6px;
+        }
+
+        .member-details strong {
+            color: #E50914;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        /* Discography Grid */
+        .discography-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .album-card {
+            background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .album-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 12px 35px rgba(229, 9, 20, 0.4);
+        }
+
+        .album-cover {
+            width: 100%;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #E50914 0%, #8B0000 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            position: relative;
+        }
+
+        .album-info {
+            padding: 25px;
+        }
+
+        .album-title {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 32px;
+            color: #E50914;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .album-date {
+            font-size: 14px;
+            color: #888888;
+            margin-bottom: 15px;
+        }
+
+        .album-desc {
+            font-size: 14px;
+            color: #cccccc;
+            line-height: 1.6;
+        }
+
+        /* Variety Shows Grid */
+        .shows-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 35px;
+        }
+
+        .show-card {
+            background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .show-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 12px 35px rgba(229, 9, 20, 0.4);
+        }
+
+        .show-thumbnail {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #E50914, #8B0000);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 70px;
+        }
+
+        .show-info {
+            padding: 25px;
+        }
+
+        .show-title {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 26px;
+            color: #E50914;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .show-type {
+            font-size: 13px;
+            color: #888888;
+            margin-bottom: 12px;
+        }
+
+        .show-desc {
+            font-size: 14px;
+            color: #cccccc;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 968px) {
+            .category-title {
+                font-size: 28px;
+            }
+
+            .categories-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .category-card {
+                width: 100%;
+                max-width: 320px;
+                margin: 0 auto;
+            }
+
+            .content-section {
+                padding: 100px 25px 60px;
+            }
+
+            .section-header h1 {
+                font-size: 42px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Category Selection Screen -->
+    <div class="category-selection" id="categorySelection">
+        <div class="category-logo">ZEROBASEONE</div>
+        <h1 class="category-title">What do you want to explore?</h1>
+        
+        <div class="categories-container">
+            <div class="category-box" onclick="showSection('members')">
+                <div class="category-card">
+                    <div class="category-icon">👥</div>
+                    <div class="category-name">Members</div>
+                    <div class="category-desc">Meet the nine talented members of ZEROBASEONE</div>
+                </div>
+            </div>
+            
+            <div class="category-box" onclick="showSection('discography')">
+                <div class="category-card">
+                    <div class="category-icon">🎵</div>
+                    <div class="category-name">Discography</div>
+                    <div class="category-desc">Explore albums, singles, and music releases</div>
+                </div>
+            </div>
+            
+            <div class="category-box" onclick="showSection('variety')">
+                <div class="category-card">
+                    <div class="category-icon">📺</div>
+                    <div class="category-name">Variety & Reality</div>
+                    <div class="category-desc">Watch their variety shows and reality content</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Members Section -->
+    <div class="main-content" id="membersSection">
+        <header>
+            <div class="logo" onclick="backToCategories()">ZEROBASEONE</div>
+            <button class="back-btn" onclick="backToCategories()">← BACK TO MENU</button>
+        </header>
+        
+        <div class="content-section">
+            <div class="section-header">
+                <h1>Our Members</h1>
+                <p>Nine unique individuals united by one dream. Get to know each member of ZEROBASEONE.</p>
+            </div>
+            
+            <div class="members-grid">
+                <div class="member-card">
+                    <div class="member-image" style="background-image: url('zb1/HANBIN.JPG.jpg');">
+                        <!-- Ganti URL dengan foto Jiwoong -->
+                    </div>
+                    <div class="member-info">
+                        <div class="member-name">Sung Han Bin (성한빈)</div>
+                        <div class="member-details">
+                            <div><strong>Rank:</strong> Rank 2 (1,888,414 votes)</div>
+                            <div><strong>Birth:</strong> june 13, 2001</div>
+                            <div><strong>Howetown:</strong> Chungcheongnam-do, South Korea</div>
+                            <div><strong>Zodiac:</strong> Gemini </div>
+                            <div><strong>Languages:</strong> Korean, English, and basic Chinese</div>
+                            <div><strong>Blood type:</strong> O</div>
+                            <div><strong>Representative Emoji:</strong> 🐹 (Hamster)</div>
+                            <div><strong>Height:</strong> 179.6 cm (5’10½”)</div>
+                            <div><strong>Position:</strong> Leader, Vocalist, Visual</div>
+                            <div><strong>Nationality:</strong> Korean</div>
+                            <div><strong>MBTI:</strong> ENFJ</div>
+                            <div><strong>Company:</strong> Studio GL1DE<div>
+                            <div><strong>Trainee period:</strong> 1 year and 8 months</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="member-card">
+                    <div class="member-image" style="background-image: url('zb1/JIWOONG.JPG.jpg');">
+                        <!-- Ganti URL dengan foto Zhang Hao -->
+                      </div>
+                        <div class="member-info">
+                        <div class="member-name"> Kim Ji Woong (김지웅)</div>
+                        <div class="member-details">
+                            <div><strong>Rank:</strong> Rank 8 (1,338,984)</div>
+                            <div><strong>Birth:</strong> june 13, 2001</div>
+                            <div><strong>Birthplace:</strong> Pohang-si, Gyeongsangbuk-do, South Korea</div>
+                            <div><strong>Hometown:</strong> Wonju, Kangwon-do, South Korea</div>
+                            <div><strong>Zodiac:</strong> Sagittarius </div>
+                            <div><strong>Blood type:</strong> AB</div>
+                            <div><strong>Representative Emoji:</strong>  🐈‍⬛ (black cat)</div>
+                            <div><strong>Height:</strong> 181 cm (5’11”)</div>
+                            <div><strong>Position:</strong> Vocalist, Rapper, Visual</div>
+                            <div><strong>Nationality:</strong> Korean</div>
+                            <div><strong>MBTI:</strong> ENFJ</div>
+                            <div><strong>Company:</strong> Nest Management<div>
+                            <div><strong>Trainee period:</strong> 6 years </div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="member-card">
+                    <div class="member-image" style="background-image: url('zb1/ZHANGHAO.JPG.jpg');">
+                        <!-- Ganti URL dengan foto Hanbin -->
+                    </div>
+                      <div class="member-info">
+                        <div class="member-name"> Zhang Hao (章昊 / 장하오)</div>
+                        <div class="member-details">
+                            <div><strong>Rank:</strong> Rank 1 (1,998,154 votes)</div>
+                            <div><strong>Korean Name:</strong> Jang Ha Neul (장하늘)</div>
+                            <div><strong>Birth:</strong> July 25th, 2000</div>
+                            <div><strong>Hometown:</strong> Nanping, Fujian, China.</div>
+                            <div><strong>Zodiac:</strong> Leo </div>
+                            <div><strong>Language:</strong> Chinese, Korean, and English</div>
+                            <div><strong>Blood type:</strong> A</div>
+                            <div><strong>Representative Emoji:</strong>  🐼 (Panda)</div>
+                            <div><strong>Height:</strong>180.5 cm (5’11”)</div>
+                            <div><strong>Position:</strong> Main Vocalist, Visual, Center</div>
+                            <div><strong>Nationality:</strong> Chinese</div>
+                            <div><strong>MBTI:</strong> ISFP</div>
+                            <div><strong>Company:</strong> Yuehua Entertainment<div></div>
+                            <div><strong>Trainee Period:</strong> 1 year and 3 months</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="member-card">
+                    <div class="member-image" style="background-image: url('zb1/MATTHEW.JPG.jpg');">
+                        <!-- Ganti URL dengan foto Matthew -->
+                    </div>
+                    <div class="member-info">
+                        <div class="member-name"> Seok Matthew (석매튜)</div>
+                        <div class="member-details">
+                            <div><strong>Rank:</strong> Rank 3 ( 1,702,174 votes)</div>
+                            <div><strong>Korean Name:</strong>Seok Woo Hyun (석우현)</div>
+                            <div><strong>Birth:</strong> May 28th, 2002</div>
+                            <div><strong>Hometown:</strong> Vancouver, Canada</div>
+                            <div><strong>Zodiac:</strong> Gemini </div>
+                            <div><strong>Language:</strong> English, Korean and French</div>
+                            <div><strong>Blood type:</strong> B</div>
+                            <div><strong>Representative Emoji:</strong>   🦊 (fox)</div>
+                            <div><strong>Height:</strong> 170 cm (5’7″)</div>
+                            <div><strong>Position:</strong> Vocalist, Rapper, Dancer</div>
+                            <div><strong>Nationality:</strong> Canadian-Korean</div>
+                            <div><strong>MBTI:</strong>  ENFJ</div>
+                            <div><strong>Company:</strong> MNH Entertainment<div></div>
+                            <div><strong>Trainee Period:</strong> 1 year and 3 months</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="member-card">
+                    <div class="member-image" style="background-image: url('zb1/zb1 taerae.JPG.jpg');">
+                        <!-- Ganti URL dengan foto Taerae -->
+                    </div>
+                    <div class="member-info">
+                        <div class="member-name"> Kim Tae Rae (김태래)</div>
+                        <div class="member-details">
+                            <div><strong>Rank:</strong> Rank 6 ( 1,349,595 votes)</div>
+                            <div><strong>Birth:</strong>  July 14th, 2002</div>
+                            <div><strong>Hometown:</strong> Chungcheongnam-do, South Korea</div>
+                            <div><strong>Zodiac:</strong> Cancer</div>
+                            <div><strong>Language:</strong> English, Korean and French</div>
+                            <div><strong>Blood type:</strong> O</div>
+                            <div><strong>Representative Emoji:</strong>   🦆 (Duck)</div>
+                            <div><strong>Height:</strong> 174 cm (5’8½”)</div>
+                            <div><strong>Position:</strong>  Main Vocalist</div>
+                            <div><strong>Nationality:</strong> Korean</div>
+                            <div><strong>MBTI:</strong>  ESTJ</div>
+                            <div><strong>Company:</strong> WakeOne Entertainment<div></div>
+                            <div><strong>Trainee Period:</strong>  2 years and 1 month</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="member-card">
+                    <div class="member-image" style="background-image: url('https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?w=500');">
+                        <!-- Ganti URL dengan foto Ricky -->
+                    </div>
+                    <div class="member-info">
+                        <div class="member-name">Ricky (리키)</div>
+                        <div class="member-details">
+                           <div><strong>Rank:</strong> Rank 4 ( 1,702,174 votes)</div>
+                           <div><strong>Birthname:</strong> Shen Quan Rui (沈泉锐)</div>
+                            <div><strong>Korean Name:</strong>Shim Cheon Ye (심천예)</div>
+                            <div><strong>Birth:</strong> May 20th, 2004</div>
+                            <div><strong>Hometown:</strong> Vancouver, Canada</div>
+                            <div><strong>Zodiac:</strong> Taurus</div>
+                            <div><strong>Language:</strong> English, Korean and French</div>
+                            <div><strong>Blood type:</strong> A</div>
+                            <div><strong>Representative Emoji:</strong>   🦊 (fox)</div>
+                            <div><strong>Height:</strong> 170 cm (5’7″)</div>
+                            <div><strong>Position:</strong> Vocalist</div>
+                            <div><strong>Nationality:</strong> Canadian-Korean</div>
+                            <div><strong>MBTI:</strong>  INTP</div>
+                            <div><strong>Company:</strong> MNH Entertainment<div></div>
+                            <div><strong>Trainee Period:</strong> 1 year and 3 months</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="member-card">
+                    <div class="member-image" style="background-image: url('https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=500');">
+                        <!-- Ganti URL dengan foto Gyuvin -->
+                    </div>
+                    <div class="member-info">
+                        <div class="member-name">Kim Gyuvin</div>
+                        <div class="member-role">Rapper, Dancer</div>
+                        <div class="member-bio">Energetic performer with contagious smile, natural variety skills, and playful personality.</div>
+                        <div class="member-details">
+                            <div><strong>Birth:</strong> August 30, 2004</div>
+                            <div><strong>Height:</strong> 180 cm</div>
+                            <div><strong>Position:</strong> Rapper, Dancer</div>
+                            <div><strong>Nationality:</strong> Korean</div>
+                            <div><strong>MBTI:</strong> ESFP</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="member-card">
+                    <div class="member-image" style="background-image: url('https://images.unsplash.com/photo-1504593811423-6dd665756598?w=500');">
+                        <!-- Ganti URL dengan foto Gunwook -->
+                    </div>
+                    <div class="member-info">
+                        <div class="member-name">Park Gunwook</div>
+                        <div class="member-role">Rapper</div>
+                        <div class="member-bio">Talented rapper with fierce charisma, impressive stage command, and youthful energy.</div>
+                        <div class="member-details">
+                            <div><strong>Birth:</strong> January 10, 2005</div>
+                            <div><strong>Height:</strong> 183 cm</div>
+                            <div><strong>Position:</strong> Rapper</div>
+                            <div><strong>Nationality:</strong> Korean</div>
+                            <div><strong>MBTI:</strong> ISTP</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="member-card">
+                    <div class="member-image" style="background-image: url('https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=500');">
+                        <!-- Ganti URL dengan foto Yujin -->
+                    </div>
+                    <div class="member-info">
+                        <div class="member-name">Han Yujin</div>
+                        <div class="member-role">Dancer, Maknae</div>
+                        <div class="member-bio">Youngest member with impressive skills, adorable charm, and bright future ahead.</div>
+                        <div class="member-details">
+                            <div><strong>Birth:</strong> March 17, 2007</div>
+                            <div><strong>Height:</strong> 174 cm</div>
+                            <div><strong>Position:</strong> Dancer, Maknae</div>
+                            <div><strong>Nationality:</strong> Korean</div>
+                            <div><strong>MBTI:</strong> INFP</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Discography Section -->
+    <div class="main-content" id="discographySection">
+        <header>
+            <div class="logo" onclick="backToCategories()">ZEROBASEONE</div>
+            <button class="back-btn" onclick="backToCategories()">← BACK TO MENU</button>
+        </header>
+        
+        <div class="content-section">
+            <div class="section-header">
+                <h1>Discography</h1>
+                <p>From debut to latest releases, explore ZEROBASEONE's musical journey.</p>
+            </div>
+            
+            <div class="discography-grid">
+                <div class="album-card">
+                    <div class="album-cover">💿</div>
+                    <div class="album-info">
+                        <div class="album-title">YOUTH IN THE SHADE</div>
+                        <div class="album-date">1st Mini Album • July 10, 2023</div>
+                        <div class="album-desc">Debut album featuring title track "In Bloom" - A fresh start showcasing their diverse musicality and powerful performances.</div>
+                    </div>
+                </div>
+
+                <div class="album-card">
+                    <div class="album-cover">💿</div>
+                    <div class="album-info">
+                        <div class="album-title">MELTING POINT</div>
+                        <div class="album-date">2nd Mini Album • November 6, 2023</div>
+                        <div class="album-desc">Second mini album with title "Crush" - Showcasing growth and maturity with addictive melodies.</div>
+                    </div>
+                </div>
+
+                <div class="album-card">
+                    <div class="album-cover">💿</div>
+                    <div class="album-info">
+                        <div class="album-title">YOU HAD ME AT HELLO</div>
+                        <div class="album-date">3rd Mini Album • May 13, 2024</div>
+                        <div class="album-desc">Third mini album featuring "Feel the POP" - A vibrant celebration of their musical evolution.</div>
+                    </div>
+                </div>
+
+                <div class="album-card">
+                    <div class="album-cover">💿</div>
+                    <div class="album-info">
+                        <div class="album-title">CINEMA PARADISE</div>
+                        <div class="album-date">4th Mini Album • August 26, 2024</div>
+                        <div class="album-desc">Latest release with "GOOD SO BAD" - Cinematic soundscapes and powerful choreography.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Variety & Reality Section -->
+    <div class="main-content" id="varietySection">
+        <header>
+            <div class="logo" onclick="backToCategories()">ZEROBASEONE</div>
+            <button class="back-btn" onclick="backToCategories()">← BACK TO MENU</button>
+        </header>
+        
+        <div class="content-section">
+            <div class="section-header">
+                <h1>Variety & Reality Shows</h1>
+                <p>Watch ZB1 in their most entertaining and candid moments.</p>
+            </div>
+            
+            <div class="shows-grid">
+                <div class="show-card">
+                    <div class="show-thumbnail">📹</div>
+                    <div class="show-info">
+                        <div class="show-title">Boys Planet</div>
+                        <div class="show-type">Survival Show • 2023</div>
+                        <div class="show-desc">The journey where it all began. Watch the members compete and form bonds that led to ZEROBASEONE's formation.</div>
+                    </div>
+                </div>
+
+                <div class="show-card">
+                    <div class="show-thumbnail">📹</div>
+                    <div class="show-info">
+                        <div class="show-title">ZB1 LOG</div>
+                        <div class="show-type">Reality Series • Ongoing</div>
+                        <div class="show-desc">Behind-the-scenes footage and daily vlogs showcasing the members' authentic personalities and group chemistry.</div>
+                    </div>
+                </div>
+
+                <div class="show-card">
+                    <div class="show-thumbnail">📹</div>
+                    <div class="show-info">
+                        <div class="show-title">STUDIO CHOOM</div>
+                        <div class="show-type">Performance • Various</div>
+                        <div class="show-desc">High-quality performance videos showcasing ZB1's exceptional choreography and stage presence.</div>
+                    </div>
+                </div>
+
+                <div class="show-card">
+                    <div class="show-thumbnail">📹</div>
+                    <div class="show-info">
+                        <div class="show-title">Weekly Idol</div>
+                        <div class="show-type">Variety • 2023-2024</div>
+                        <div class="show-desc">Fun games, random play dance, and hilarious moments with the group on this iconic variety show.</div>
+                    </div>
+                </div>
+
+                <div class="show-card">
+                    <div class="show-thumbnail">📹</div>
+                    <div class="show-info">
+                        <div class="show-title">Knowing Bros</div>
+                        <div class="show-type">Variety • 2024</div>
+                        <div class="show-desc">ZB1 visits the iconic classroom setting for games, TMI revelations, and comedy gold.</div>
+                    </div>
+                </div>
+
+                <div class="show-card">
+                    <div class="show-thumbnail">📹</div>
+                    <div class="show-info">
+                        <div class="show-title">Road to Kingdom</div>
+                        <div class="show-type">Competition • 2024</div>
+                        <div class="show-desc">Powerful performances and fierce competition as ZB1 showcases their artistry on stage.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(section) {
+            document.getElementById('categorySelection').style.display = 'none';
+            document.getElementById('membersSection').classList.remove('active');
+            document.getElementById('discographySection').classList.remove('active');
+            document.getElementById('varietySection').classList.remove('active');
+            
+            if (section === 'members') {
+                document.getElementById('membersSection').classList.add('active');
+            } else if (section === 'discography') {
+                document.getElementById('discographySection').classList.add('active');
+            } else if (section === 'variety') {
+                document.getElementById('varietySection').classList.add('active');
+            }
+            
+            window.scrollTo(0, 0);
+        }
+
+        function backToCategories() {
+            document.getElementById('categorySelection').style.display = 'flex';
+            document.getElementById('membersSection').classList.remove('active');
+            document.getElementById('discographySection').classList.remove('active');
+            document.getElementById('varietySection').classList.remove('active');
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
